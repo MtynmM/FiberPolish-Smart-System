@@ -1,5 +1,7 @@
+import os
 import ttkbootstrap as ttk
 import ttkbootstrap.constants as ttk_const
+from .frame_player import AnimatedFrameLabel
 from tkinter import messagebox
 from .panels.timer_panel import TimerPanel
 from .panels.control_panel import ControlPanel
@@ -197,7 +199,31 @@ class PolisherView(ttk.Window):
 
     def _create_content_frame(self):
         self.content_frame = ttk.Frame(self)
-        self.content_frame.pack(fill=ttk_const.BOTH, expand=True, padx=10, pady=10)
+        self.content_frame.pack(fill=ttk_const.BOTH, expand=True)
+
+        # --- تنظیم پس‌زمینه متحرک (ویدیو) ---
+        try:
+            # 1. پیدا کردن مسیر پوشه frames
+            base_dir = os.path.dirname(os.path.abspath(__file__))
+            # مسیر: src/view/../../src/assets/frames -> src/assets/frames
+            frames_path = os.path.join(base_dir, "..", "assets", "frames")
+            
+            # 2. ساخت پلیر (fps=24 برای حالت سینمایی)
+            self.bg_video = AnimatedFrameLabel(
+                self.content_frame, 
+                frame_folder=frames_path, 
+                fps=24,
+                bg="black" # رنگ پس‌زمینه در صورت لود نشدن عکس
+            )
+            
+            # 3. چسباندن به کل صفحه و فرستادن به زیر (Lower)
+            self.bg_video.place(x=0, y=0, relwidth=1, relheight=1)
+            self.bg_video.lower()
+            
+        except Exception as e:
+            print(f"Background Video Error: {e}")
+
+        # نمایش صفحه خانه
         self.show_home_view()
 
     def _create_status_bar(self):
