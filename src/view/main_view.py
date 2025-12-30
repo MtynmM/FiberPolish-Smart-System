@@ -185,23 +185,20 @@ class PolisherView(ttk.Window):
             bootstyle="inverse-dark"
         ).pack(pady=25)
 
+        # آیتم‌ها
         menu_items = [
-            ("Timer / Stopwatch", "primary", self.show_timer_view),
-            ("Set Step Size",     ttk_const.SECONDARY, self.show_step_panel),
-            ("Set Speed Step",    ttk_const.SUCCESS, self.show_speed_panel),
-            ("Camera View",       ttk_const.DANGER,  self.show_camera_view),
+            ("⏱️ Timer / Stopwatch", ttk_const.INFO, self.show_timer_view),
+            ("Set Step Size", ttk_const.PRIMARY, self.show_step_panel),
+            ("Set Speed Step", ttk_const.SECONDARY, self.show_speed_panel),
+            ("Camera View", ttk_const.DANGER, self.show_camera_view),
         ]
 
         for text, style, cmd in menu_items:
-            btn_frame = ttk.Frame(self.side_menu, bootstyle=style)
-            btn_frame.pack(fill=ttk_const.X, padx=15, pady=8)
-            
             ttk.Button(
-                btn_frame, text=text, 
-                bootstyle=style,
-                style="Sidebar.TButton",
+                self.side_menu, text=text, bootstyle=style,
+                width=20, padding=(10, 15),
                 command=lambda c=cmd: self._handle_menu_click(c)
-            ).pack(fill=ttk_const.X, ipady=8)
+            ).pack(pady=8, padx=15, fill=ttk_const.X)
 
         # تنظیم مکان اولیه (مخفی)
         top_offset = self.CONSTANTS["TOOLBAR_HEIGHT"]
